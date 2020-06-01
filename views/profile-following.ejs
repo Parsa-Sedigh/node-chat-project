@@ -1,0 +1,28 @@
+<%- include('includes/header'); %>
+
+<div class="container py-md-5 container--narrow">
+
+    <%- include('includes/flash') %>
+
+    <!-- Remember that = would escape the output but this is HTML that WE are writing, so we can trust this code.So we can say
+     - to just output it without escaping. -->
+    <%- include('includes/profileShared.ejs'); %>
+
+    <!-- In forEach() the followedUser is the person that this profile user is following him. So this profile user becomes the
+     follower of that person and that person becomes the following or followed of this profile user.  -->
+
+    <div class="list-group">
+        <% following.forEach((followedUser) => {
+        %>
+
+            <a href="/profile/<%= followedUser.username %>" class="list-group-item list-group-item-action">
+                <img class="avatar-tiny" src="<%= followedUser.avatar %>" alt="follower avatar">
+                <%= followedUser.username %>
+            </a>
+
+        <% }) %>
+
+    </div>
+</div>
+
+<%- include('includes/footer'); %>

@@ -1,0 +1,25 @@
+<%- include('includes/header'); %>
+
+<div class="container py-md-5 container--narrow">
+
+    <%- include('includes/flash') %>
+
+    <!-- Remember that = would escape the output but this is HTML that WE are writing, so we can trust this code.So we can say
+     - to just output it without escaping. -->
+    <%- include('includes/profileShared.ejs'); %>
+
+    <div class="list-group">
+        <% postsData.forEach((post) => {
+        %>
+
+            <a href="/post/<%= post.id %>" class="list-group-item list-group-item-action">
+                <img class="avatar-tiny" src="<%= profileAvatar %>">
+                <strong><%= post.title %></strong> on <%= post.created_date.getDate() %>/<%= post.created_date.getMonth() %>/<%= post.created_date.getFullYear() %>
+            </a>
+
+<% }) %>
+    </div>
+
+</div>
+
+<%- include('includes/footer'); %>

@@ -1,0 +1,44 @@
+<%- include('includes/header') %>
+
+<div class="container py-md-5 container--narrow">
+
+    <%- include('includes/flash') %>
+
+    <div class="d-flex justify-content-between">
+        <h2><%= postData[0].title %></h2>
+
+        <% if (isVisitorOwner) { %>
+
+            <span class="pt-2">
+        <a href="/post/<%= postData[0].post_id %>/edit" class="text-primary mr-2" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                    class="fas fa-edit"></i></a>
+
+        <!-- We wrap the de;et button inside a <form> tag, because when we want to delete a post we need some information about
+         the post we want to delete so we want to send this info through a post request and a post request can not done by a
+         simple <a> or <button> tag so we need a <form> element with method of post to do this task. -->
+        <form class="delete-post-form d-inline" action="/post/<%= postData[0].post_id %>/delete" method="POST">
+
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button class="delete-post-button text-danger" data-toggle="tooltip" data-placement="top" title="Delete"><i
+                      class="fas fa-trash"></i></button>
+        </form>
+      </span>
+
+        <% } %>
+
+    </div>
+
+    <p class="text-muted small mb-4">
+        <a href="/profile/<%= relatedUser[0].username %>"><img class="avatar-tiny" src="<%= avatar %>"></a>
+        Posted by <a href="/profile/<%= relatedUser[0].username %>">
+            <%= relatedUser[0].username %></a> on <%= postData[0].created_date.getMonth() + 1 %>
+        /<%= postData[0].created_date.getDate() %>/<%= postData[0].created_date.getFullYear() %>
+    </p>
+
+    <div class="body-content">
+        <%- filterUserHTML(postData[0].body) %>
+    </div>
+
+</div>
+
+<%- include('includes/footer') %>

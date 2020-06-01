@@ -1,0 +1,34 @@
+<%- include('includes/header') %>
+
+<div class="container py-md-5 container--narrow">
+
+    <%- include('includes/flash') %>
+
+    <form action="/create-post" method="POST">
+        <div class="form-group">
+            <label for="post-title" class="text-muted mb-1"><small>Title</small></label>
+            <input required name="title" id="post-title" class="form-control form-control-lg form-control-title" type="text" placeholder="" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+            <label for="post-body" class="text-muted mb-1"><small>Body Content</small></label>
+            <textarea required name="body" id="post-body" class="body-content tall-textarea form-control" type="text"></textarea>
+        </div>
+
+        <!-- For leveraging the csrf token we made up this hidden <input>. Remember: The name attr of this hidden input must
+        be exactly _csrf  and that's the name that csurf package is going to looking for it in our HTML codes.-->
+
+        <!-- The value attr of <input type="hidden" name="_csrf"> is going to protect us from csrf attacks. So there is no way
+        for codes from another browser tab to access this string of text (the string of text is what this value attr in website is-
+        it would be a random string of text and number).
+        So by including this attrs with this hidden <input> element in our request to server, we are proving to the csurf package
+        that this is a valid trustworthy request. So now if an external tab in browser tries to send a malicious request to
+        our server, our csurf package will send an error and says: invalid csrf token.But instead of this error we want a red flash
+        error message. -->
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+        <button class="btn btn-primary">Save New Post</button>
+    </form>
+</div>
+
+<%- include('includes/footer') %>

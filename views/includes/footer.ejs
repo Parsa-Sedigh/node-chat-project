@@ -1,0 +1,28 @@
+<footer class="border-top text-center small text-muted py-3">
+    <p class="m-0">Copyright &copy; 2019 <a href="/" class="text-muted">OurApp</a>. All rights reserved.</p>
+</footer>
+
+<!-- important: This if statement is for HTML markup for chat, so if user has logged in, he can see the chat's frontend codes.But we must
+      set another if statement for chat's JS code (things like methods for chat's functionality or properties and ...) and this is
+      for JS codes for chat and in main.js, we check that if the HTML code of chat exists, we actually apply the JS code for chat.
+      So if the user doesn't login he can't see the HTML code of chat and therefore (because of if statement in main.js) also can not
+      feel the JS code for chat.(like events and ...)-->
+<% if (user) { %>
+    <!-- The content of the chat-wrapper <div> will fill with JS in chat.js -->
+    <div id="chat-wrapper" class="chat-wrapper shadow border-top border-left border-right"></div>
+
+        <!-- Now our server is using socket.io (we set this up before moving to this file), it's (server) going to make sure
+         that a JS file designed for the web browser is available from the src URL (/socket.io/socket.io.js). This way the web browser
+         has all of the tools that it will need to actually open the socket connection.
+         Actually this JS file (socket.io.js) that we included in footer.ejs, is going to make io functions available within the
+         global browser scope (this means by including this <script> now all of our frontend JS files have access to io functions and ...) -->
+    <script src="/socket.io/socket.io.js"></script>
+<% } %>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script>$('[data-toggle="tooltip"]').tooltip()</script>
+<script src="/main-bundled.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<%- include('includes/header'); %>
+
+<div class="container py-md-5 container--narrow">
+
+    <%- include('includes/flash') %>
+
+    <!-- Remember that = would escape the output but this is HTML that WE are writing, so we can trust this code.So we can say
+     - to just output it without escaping. -->
+    <%- include('includes/profileShared.ejs'); %>
+
+    <div class="list-group">
+        <% followers.forEach((follower) => {
+        %>
+
+            <a href="/profile/<%= follower.username %>" class="list-group-item list-group-item-action">
+                <img class="avatar-tiny" src="<%= follower.avatar %>" alt="follower avatar">
+                <%= follower.username %>
+            </a>
+
+        <% }) %>
+
+    </div>
+</div>
+
+<%- include('includes/footer'); %>

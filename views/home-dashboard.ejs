@@ -1,0 +1,39 @@
+<%- include('includes/header') %>
+
+<!-- Remember: In the line we are including our header template, because that isn't just javascript that that we want to
+ execute but instead we actually want to output or print that, we could use = in front of % , but = will escape the include()
+ function and since that is pulling from a template that we trust (obviously we created it) we don't need to escape it once again.
+ So we use - . -->
+
+<!-- For users that are logged in, this page should show the latest posts from the people they follow.If a user has not followed
+ anyone or if the people they follow have not created any posts yet, then we would expect to see that message: 'Your feed displays .....' -->
+
+<div class="container py-md-5 container--narrow">
+
+    <%- include('includes/flash') %>
+
+    <!-- This content should only be displayed if there are no relevant posts to display. -->
+    <% if (posts.length) { %>
+
+    <h2 class="text-center mb-4">The latest posts from those you follow</h2>
+        <div class="list-group">
+            <% posts.forEach((post) => {
+            %>
+
+                <a href="/post/<%= post.post_id %>" class="list-group-item list-group-item-action">
+                    <img class="avatar-tiny" src="<%= post.avatar %>">
+                    <strong><%= post.title %></strong> <span class="text-muted small">by <%= post.username %> on <%= post.created_date %></span>
+                </a>
+
+            <% }) %>
+        </div>
+
+    <% } else { %>
+    <div class="text-center">
+        <h2>Hello <strong><%= user.username %></strong>, your feed is empty.</h2>
+        <p class="lead text-muted">Your feed displays the latest posts from the people you follow. If you don&rsquo;t have any friends to follow that&rsquo;s okay; you can use the &ldquo;Search&rdquo; feature in the top menu bar to find content written by people with similar interests and then follow them.</p>
+    </div>
+    <% } %>
+</div>
+
+<%- include('includes/footer') %>
