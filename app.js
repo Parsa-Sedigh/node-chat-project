@@ -25,6 +25,11 @@ const db = require('./db');
 *   After these 2 steps we turn our app into git repo. Command is: git init
 *   Now we just created a new or empty git repo in this folder. Now let's add all of our files to the staging area. So run command:
 *   git add -A
+*   Then let's commit those files : git commit -m '<commit message (our first , second ... commit for example!)>'
+*   Now all of our files are committed locally within git. Now we need to push this repo up to heroku.So we are going to add a
+*   remote which is heroku. So type: heroku git:remote -a <the name of your heroku app>
+*   If it was successful you'll see : set git remote heroku to https://git...
+*   At this point we are ready to push our repo up to the heroku service, so type: git push heroku master
 *   */
 
 /* csurf is better to require above or before the const app = express(); */
