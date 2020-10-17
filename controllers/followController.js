@@ -44,14 +44,14 @@ exports.removeFollow = (req, res) => {
             });
 
             /* Important: We must save the flash messages after all of them are created in their arrays.So we must use .save()
-            *   out of .forEach() or any loop in order to save all of them.Because if we would save them inside the forEach or
-            *   loop we must redirect them, but some of the flash messages would be remain before the redirect(). So we have to
-            *   save them after looping over all of them.  */
+                out of .forEach() or any loop in order to save all of them.Because if we would save them inside the forEach or
+                loop we must redirect them, but some of the flash messages would be remain before the redirect(). So we have to
+                save them after looping over all of them.  */
             req.session.save(() => {
                 res.redirect('/');
             });
 
-        });
+    });
 };
 
 

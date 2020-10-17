@@ -240,7 +240,7 @@ export default class RegistrationForm {
         }
 
     };
-
+        
     passwordImmediately () {
         if (this.password.value.length > 10) {
             this.showValidationError(this.password, 'Password can not exceed 10 characters.');

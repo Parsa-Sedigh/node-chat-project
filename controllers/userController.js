@@ -461,7 +461,7 @@ exports.profilePostsScreen = (req, res) => {
         .then((posts) => {
 
             /* When we set up this function to return promise, in promise we are going to make it resolves with a value that is
-            * the array of posts and we can get receive that value by including a parameter in .then(). */
+            the array of posts and we can get receive that value by including a parameter in .then(). */
             res.render('profile', {
                 currentPage: 'posts',
                 postsData: posts,

@@ -73,7 +73,7 @@ const sanitizeHTML = require('sanitize-html');
 /* The next app.use() will tell express to add the user submitted data into our req object.So then we can access that
 submitted data through req.body */
 app.use(express.urlencoded({
-    extended : false
+    extended: false
 }));
 app.use(express.json());
 
@@ -84,22 +84,21 @@ app.use('/api', require('./router-api'));
 in session options.*/
 
 const sessionStore = new MySQLStore({
-        clearExpired: true,
-        checkExpirationInterval: 900000,
-        expiration: 1000 * 60 * 60,
-        createDatabaseTable: true,
-        endConnectionOnClose: true,
-        charset: 'utf8mb4_bin',
-        schema: {
-            tableName: 'sessions',
-            columnNames: {
-
-                session_id: 'session_id',
-                expires: 'expires',
-                data: 'data'
-            }
+    clearExpired: true,
+    checkExpirationInterval: 900000,
+    expiration: 1000 * 60 * 60,
+    createDatabaseTable: true,
+    endConnectionOnClose: true,
+    charset: 'utf8mb4_bin',
+    schema: {
+        tableName: 'sessions',
+        columnNames: {
+            session_id: 'session_id',
+            expires: 'expires',
+            data: 'data'
         }
-    }, db);
+    }
+}, db);
 
 const sessionOptions = session({
     secret: 'javascript is cool',
@@ -114,21 +113,21 @@ const sessionOptions = session({
 
 app.use(sessionOptions);
 
-/* By using app.use(flash()) we have access to flash() in every req object in our application and we can create a errors array or
-* any array within that flash. */
+/* By using app.use(flash()) we have access to flash() in every req object in our application and we can create an errors array or
+any array within that flash. */
 app.use(flash());
 
 /* When we are saying app.use() we are telling express to run the function inside .use() for every request and because we are
-* including this before router this will first and since we are calling next(), express will move on to actual functions to
-* a route.So it is important that this locals object must be before defining our router.
-* With this special app.use() we now have access to a user property from within any of our ejs templates and remember: In
-* our ejs files for accessing our properties in sessions, we must say <name of object that is within our sessions>.<name of property>
- Before making this middleware, in ejs we could simply just say : <name of property>.*/
+including this before router this will first and since we are calling next(), express will move on to actual functions to
+a route.So it is important that this locals object must be before defining our router.
+With this special app.use() we now have access to a user property from within any of our ejs templates and remember: In
+our ejs files for accessing our properties in sessions, we must say <name of object that is within our sessions>.<name of property>
+Before making this middleware, in ejs we could simply just say : <name of property>.*/
 /* We want to have a function that when we are passing an object of data to our view templates, we can call this middleware function
-* to do this work and therefore we have less duplication.
-* important: Remember you Must create the session object you want to be in session, in appropriate place and that place is in
-*   controllers : In controllers , when we are calling the models methods, if there is no error , we can set (create) the sessions
-*   and we know in routes.js we are calling the controller methods.  */
+to do this work and therefore we have less duplication.
+important: Remember you Must create the session object you want to be in session, in appropriate place and that place is in
+ controllers : In controllers , when we are calling the models methods, if there is no error , we can set (create) the sessions
+ and we know in routes.js we are calling the controller methods.  */
 
 app.use((req, res, next) => {
 
@@ -144,7 +143,7 @@ app.use((req, res, next) => {
     * is use sanitize to whatever markdown outputs in this file. */
 
     /* Make our markedown function available from within ejs templates and remember whatever we assign to res.locals.<x>
-    * it will available within our templates. For accessing those thing within our templates, we can use that x. */
+    it will available within our templates. For accessing those thing within our templates, we can use that x. */
     res.locals.filterUserHTML = (content) => {
         return sanitizeHTML(markdown(content), {
             allowedTags: ['p', 'br', 'ul', 'ol', 'strong', 'bold', 'i', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -157,7 +156,7 @@ app.use((req, res, next) => {
     important: We STILL MUST CREATE these message with req.flash() and save them ... but when we want to manually pass these to
      our templates, we can automate this passing in task with these lines of codes.*/
     /* and also remember that in res.locals.<x> x is the name of that array in the flash that we can use it in our templates and
-    * in req.flash(<y>) y is the name of that array in the place that we are CREATING these arrays in our controller.*/
+    in req.flash(<y>) y is the name of that array in the place that we are CREATING these arrays in our controller.*/
     res.locals.errors = req.flash('errors');
     res.locals.successMessages = req.flash('successMessages');
 
@@ -169,7 +168,6 @@ app.use((req, res, next) => {
     if (req.session.user) {
         req.visitorId = req.session.user.userID;
     } else {
-
         req.visitorId = 0;
     }
 
@@ -184,8 +182,14 @@ app.use((req, res, next) => {
 });
 
 const bodyParser = require('body-parser');
-const router = require('./router');
 
+/* Database connection must be BEFORE app.use('/', router);
+Important: So database connection must be the first thing we do in our app.
+So if your database connection and app.use('/', router); are in the same file and you are exporting the pool(database connection) from that
+file, the module.exports = pool; must be BEFORE app.use('/', router); . Because as I mentioned the database connection must be before
+of anything else and in that case, db connection and it's exporting(module.exports = pool;), must be before of using a router on our app.
+You can see that in ipconcrete-panel project.*/
+const router = require('./router');
 
 
 /* HTTP request are stateless.This means each request is ran without any knowledge of the requests that ran before it.So how
@@ -213,10 +217,10 @@ app.set('views', 'views');
 app.set('view engine', 'ejs');
 
 /* We must use the csrf package above of when we are using our router (app.use('/', router);)
-* Now when we are saying app.use(csrf()); , this will set things up so that any of our post, put, delete or any requests
-* that modify state, will need to have a valid and matching CSRF token or else the request will be rejected and we'll throw
-* an error.So right after this app.use(); let's set up a piece of middleware to make the CSRF token available from within
-* our ejs templates. For doing this you must say res.locals.<the name you want to access that CSRF token with this name> = ... */
+Now when we are saying app.use(csrf()); , this will set things up so that any of our post, put, delete or any requests
+that modify state, will need to have a valid and matching CSRF token or else the request will be rejected and we'll throw
+an error.So right after this app.use(); let's set up a piece of middleware to make the CSRF token available from within
+our ejs templates. For doing this you must say res.locals.<the name you want to access that CSRF token with this name> = ... */
 app.use(csrf());
 app.use((req, res, next) => {
     res.locals.csrfToken = req.csrfToken();
@@ -242,22 +246,22 @@ app.use((err, req, res, next) => {
 });
 
 /* Important: After setting up the csurf package and it's configuration, we must go through our application and anywhere we are performing
-*   a POST request, we need to pass along that matching CSRF token.
-*   So we must go through our app, and update the app to work with csrf package.
-*   We knew from the beginning that when you sumitting a from, that form sends a post request to our server and
-*   after setting the csurf package, the server demand a csrf token on any post request and also we need to update our async post
-*   requests that are coming from our frontend files, like using axios.post() or fetch() or ...
-*
-*   Important: When you are sending a post request if you have a <input type="hidden" name="_csrf" value="<%= csrfToken %>"> in your
-*    HTML, when you are sending a post request, it doesn't need to also give the sending values, the _csrf manually.
-*    But when you haven't this HTML, like in your search.js , you must give the _csrf value into the object or data you are
-*    sending to server manually like what we did in search.js class.
-*
-*   Important: Actually when you want to send a post request to server, you have 2 options, via AJAX or without AJAX,
-*    if you want to use AJAX, you must provide the _csrf value for data that you are sending along the post request to
-*    server when you are using axios.post() or fetch() , but when you don't use ajax, you have a route that when we send a post
-*    request to that route, some certain functions will run. Those functions will get the data from req.<name of the HTML field> object
-*    and ... So in this case, you must use that famous csrf hidden input.
+    a POST request, we need to pass along that matching CSRF token.
+    So we must go through our app, and update the app to work with csrf package.
+    We knew from the beginning that when you sumitting a from, that form sends a post request to our server and
+    after setting the csurf package, the server demand a csrf token on any post request and also we need to update our async post
+    requests that are coming from our frontend files, like using axios.post() or fetch() or ...
+
+    Important: When you are sending a post request if you have a <input type="hidden" name="_csrf" value="<%= csrfToken %>"> in your
+     HTML, when you are sending a post request, it doesn't need to also give the sending values, the _csrf manually.
+     But when you haven't this HTML, like in your search.js , you must give the _csrf value into the object or data you are
+     sending to server manually like what we did in search.js class.
+
+    Important: Actually when you want to send a post request to server, you have 2 options, via AJAX or without AJAX,
+     if you want to use AJAX, you must provide the _csrf value for data that you are sending along the post request to
+     server when you are using axios.post() or fetch() , but when you don't use ajax, you have a route that when we send a post
+     request to that route, some certain functions will run. Those functions will get the data from req.<name of the HTML field> object
+     and ... So in this case, you must use that famous csrf hidden input.
 * */
 
 /* At the moment our server is just an express application and it's serving our express app, but now we also want the server
@@ -315,7 +319,6 @@ io.on('connection', (socket) => {
         socket.on('chatMessageFromBrowser', (data) => {
             /* Remember: The server doesn't send a socket event named 'chatMessageFromServer' until it receives a socket request
             * from browser named 'chatMessageFromBrowser'. */
-
 
 
             /* Let's send the incoming data out or broadcast it to all of the connected users (users that have logged in and

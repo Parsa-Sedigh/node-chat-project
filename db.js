@@ -48,23 +48,30 @@ testConnection()
 
 module.exports = pool;
 
-/* Our app must start from db.js not app.js . This means we don't want to launch our application
-* until we've had a chance to to establish our connection to database.So we go to our app.js
-* file and delete or comment out, app.listen(3000); and instead we write : module.exports = app;
-* So this way we are still creating an express application under the app variable, but instead of telling it
-* to actually listening, we are just exporting it from that file and after that we must go to package.json
-* and update the watch script to watch the db.js file not app.js file. */
+/*
+Important: Our app must start from db.js not app.js . This means we don't want to launch our application
+ until we've had a chance to to establish our connection to database.So we go to our app.js
+ file and delete or comment out, app.listen(3000); and instead we write : module.exports = app;
+ So this way we are still creating an express application under the app variable, but instead of telling it
+ to actually listening, we are just exporting it from that file and after that we must go to package.json
+ and update the watch script to watch the db.js file not app.js file.
+
+Important: So FIRST, we must load our dotenv configurations, by saying: dotenv.config() and then we must create our pool connection and
+ handle our connection to database, THEN, we can require() or bring our express middlewares. So after creating the connection to db,
+ we can write our express codes.
+ When you want to bring your middlewares, first you must create an express application, by saying: const app = express();
+ And then at the end of our app(which is at the end of db.js file), we need to listen to process.env.port .*/
 /* So with requiring our express app after establishing a connection to database, express app won't begin until we
-*  have a chance to export the mysql database. */
+have a chance to export the mysql database. */
 /* important And also remember that we must start our app (require('./app')) after the connection to db is established.Because we are using
-*   connection object in other files so if we put the require('./app') outside of connection.connect(); we will get
-*   errors when we are querying to DB. Why we get an error in this project? Because we are using the connection
-*   in router and other places and in these places we are using connection to db so we must FIRST establish our
-*   connection to db and then require our express application which in this case is require('./app'). */
+    connection object in other files so if we put the require('./app') outside of connection.connect(); we will get
+    errors when we are querying to DB. Why we get an error in this project? Because we are using the connection
+    in router and other places and in these places we are using connection to db so we must FIRST establish our
+    connection to db and then require our express application which in this case is require('./app'). */
 const app = require('./app');
 
 /* We might need to listen on a different port number when we push this up to it's production or live or real environment
-* that everyone can visit.*/
+that everyone can visit.*/
 app.listen(process.env.PORT);
 
 

@@ -391,7 +391,7 @@ User.doesEmailExist = (email) => {
 
             /* Now we want to stop any further execution of the whole function, because we don't want that value which the user
             * sent use and maybe it is malicious, to get near our database in further codes. So we must use return;
-            * and remember the else {} is not necessiry, because if the condition of if statement is true it would not  */
+            * and remember the else {} is not necessary, because if the condition of if statement is true it would not  */
             return;
         } else {
             const user = await pool.query('SELECT users.email FROM `users` WHERE users.email = ?', [email]);
